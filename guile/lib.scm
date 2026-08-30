@@ -1,7 +1,10 @@
 (define-module (lib)
+  #:use-module ((ice-9 rdelim)
+                #:select (read-line))
   #:export (parse
-
-            create-tcp-socket))
+            create-tcp-socket
+            start-blocking-server
+            echo-handler))
 
 (define (parse command)
   "Hello, World!")
