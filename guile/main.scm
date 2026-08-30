@@ -2,8 +2,7 @@
 !#
 (add-to-load-path (dirname (current-filename)))
 (use-modules ((lib)
-              #:prefix lib:))
+              #:prefix l.))
 
 (define (main args)
-  (display (lib:create-tcp-socket 12345))
-  (newline))
+  (l.start-blocking-server (l.create-tcp-socket 12345) l.echo-handler))
