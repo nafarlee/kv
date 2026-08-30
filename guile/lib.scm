@@ -6,6 +6,16 @@
 (define (parse command)
   "Hello, World!")
 
+(define (echo-handler client)
+  (let loop ()
+    (let ((line (read-line client)))
+      (unless (eof-object? line)
+        (display line client)
+        (newline client)
+        (force-output client)
+        (loop))))
+  (close-port client))
+
 (define (start-blocking-server sock handler)
   (listen sock 128)
   (let loop ()
