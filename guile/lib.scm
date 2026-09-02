@@ -19,7 +19,8 @@
         (loop))))
   (close-port client))
 
-(define (start-blocking-server sock handler)
+(define (start-blocking-server port handler)
+  (define sock (create-tcp-socket port))
   (listen sock 128)
   (let loop ()
     (let ((client (car (accept sock))))
