@@ -22,7 +22,7 @@
 (define (start-blocking-server port handler)
   (define sock (create-tcp-socket port))
   (listen sock 128)
-  (simple-format #t "Starting kv server on port ~A..." port)
+  (simple-format #t "Starting kv server on port ~A...~%" port)
   (let loop ()
     (let ((client (car (accept sock))))
       (handler client)
