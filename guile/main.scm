@@ -5,4 +5,4 @@
               #:prefix l.))
 
 (define (main args)
-  (l.start-blocking-server 12345 l.echo-handler))
+  (l.start-blocking-server 6379 l.echo-handler))
