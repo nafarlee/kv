@@ -1,37 +1,57 @@
-(define-module (lib)
-  #:use-module ((ice-9 rdelim)
-                #:select (read-line))
-  #:export (parse
-            create-tcp-socket
-            start-blocking-server
-            echo-handler))
+(define-library (lib)
+  (export parse
+          start-blocking-server
+          echo-handler)
+  (import (scheme base)
+          (only (scheme write)
+                display)
+          (only (srfi 28)
+                format)
+          (only (srfi 106)
+                socket-accept
+                make-server-socket
+                call-with-socket
+                socket-output-port
+                socket-input-port))
+  (begin
+    (define (parse command)
+      "Hello, World!")
 
-(define (parse command)
-  "Hello, World!")
+    (define (call-with-output-bytevector proc)
+      (let ((bv (open-output-bytevector)))
+        (proc bv)
+        (get-output-bytevector bv)))
 
-(define (echo-handler client)
-  (let loop ()
-    (let ((line (read-line client)))
-      (unless (eof-object? line)
-        (simple-format #t "< ~S~%" line)
-        (display line client)
-        (simple-format #t "> ~S~%" line)
-        (newline client)
-        (force-output client)
-        (loop))))
-  (close-port client))
+    (define (create-tcp-socket port)
+      (make-server-socket (number->string port)))
 
-(define (start-blocking-server port handler)
-  (define sock (create-tcp-socket port))
-  (listen sock 128)
-  (simple-format #t "Starting kv server on port ~A...~%" port)
-  (let loop ()
-    (let ((client (car (accept sock))))
-      (handler client)
-      (loop))))
+    (define (read-line port)
+      (utf8->string
+       (call-with-output-bytevector
+         (lambda (out)
+           (let loop ((b (read-u8 port)))
+             (case b
+               ((#xA) #t)
+               ((#xD) (loop (read-u8 port)))
+               (else (write-u8 b out)
+                     (loop (read-u8 port)))))))))
 
-(define (create-tcp-socket port)
-  (let ((sock (socket PF_INET SOCK_STREAM 0)))
-    (setsockopt sock SOL_SOCKET SO_REUSEADDR 1)
-    (bind sock AF_INET INADDR_LOOPBACK port)
-    sock))
+    (define (start-blocking-server port handler)
+      (call-with-socket (create-tcp-socket port)
+        (lambda (sock)
+          (display (format "Starting kv server on port ~a...~%" port))
+          (let loop ()
+            (handler (socket-accept sock))
+            (loop)))))
+
+    (define (echo-handler client)
+      (let ((in (socket-input-port client))
+            (out (socket-output-port client)))
+        (let loop ()
+          (let ((line (read-line in)))
+            (unless (eof-object? line)
+              (display (format "< ~s~%" line))
+              (write-bytevector (string->utf8 (string-append line "\n")) out)
+              (display (format "> ~s~%" line))
+              (flush-output-port out)
+              (loop))))))))
