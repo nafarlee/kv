@@ -1,8 +1,9 @@
-#!/usr/bin/env -S guile -e main -s
-!#
-(add-to-load-path (dirname (current-filename)))
-(use-modules ((lib)
-              #:prefix l.))
+(import
+  (scheme base)
+  (only (scheme process-context) command-line)
+  (prefix (lib) l.))
 
 (define (main args)
   (l.start-blocking-server 6379 l.echo-handler))
+
+(main (command-line))
