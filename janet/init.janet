@@ -39,10 +39,11 @@
     (def id (gensym))
     (defn lp [in]
       (when in
-        (when-let ([parsed] (peg/match RESP in))
-          (printf "%s< %n" id parsed))
-        (:write connection "+OK\r\n")
-        (printf "%s> \"+OK\"" id)
+        (def parsed (peg/match RESP in))
+        (printf "%s< %n" id parsed)
+        (def output (execute t parsed))
+        (printf "%s> %n" id output)
+        (:write connection (resp-dump output))
         (lp (:read connection BUFFER_SIZE))))
     (lp (:read connection BUFFER_SIZE))))
 
