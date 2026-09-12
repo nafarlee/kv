@@ -29,13 +29,13 @@
     ["SET" k v]
     (do
       (put ht k v)
-      :OK)
+      "OK")
     
     ["GET" k]
     (get ht k)
 
     ["COMMAND" "DOCS"]
-    :OK))
+    "OK"))
 
 
 (defn handler [t connection]
