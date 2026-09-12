@@ -12,6 +12,14 @@
    :bulk-string (% (* "$" (lenprefix (* (number :d+) :return) (<- 1)) :return))
    :array       (group (* "*" (lenprefix (* (number :d+) :return) :value)))})
 
+
+(defn resp-dump [x]
+  (cond
+    (indexed? x) (string "*" (length x) "\r\n" ;(map resp-dump x))
+    (int? x)     (string ":" x "\r\n")
+    (bytes? x)   (string "$" (length x) "\r\n" x "\r\n")))
+
+
 (defn handler [connection]
   (defer (:close connection)
     (def id (gensym))
