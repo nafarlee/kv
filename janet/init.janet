@@ -20,6 +20,20 @@
     (bytes? x)   (string "$" (length x) "\r\n" x "\r\n")))
 
 
+(defn execute [ht command]
+  (match command
+    [:SET k v]
+    (do
+      (put ht k v)
+      :OK)
+    
+    [:GET k]
+    (get ht k)
+
+    [:COMMAND :DOCS]
+    :OK))
+
+
 (defn handler [connection]
   (defer (:close connection)
     (def id (gensym))
