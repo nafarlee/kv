@@ -26,15 +26,15 @@
 
 (defn execute [ht command]
   (match command
-    [:SET k v]
+    ["SET" k v]
     (do
       (put ht k v)
       :OK)
     
-    [:GET k]
+    ["GET" k]
     (get ht k)
 
-    [:COMMAND :DOCS]
+    ["COMMAND" "DOCS"]
     :OK))
 
 
