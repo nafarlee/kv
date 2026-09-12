@@ -44,9 +44,9 @@
     (defn lp [in]
       (when in
         (def parsed (resp-parse in))
-        (printf "%s< %n" id parsed)
+        (printf "[%s]< %n" id parsed)
         (def output (execute t parsed))
-        (printf "%s> %n" id output)
+        (printf "[%s]> %n" id output)
         (:write connection (resp-dump output))
         (lp (:read connection BUFFER_SIZE))))
     (lp (:read connection BUFFER_SIZE))))
