@@ -15,8 +15,8 @@
       (test/assert false))))
 
 (with-test "should parse COMMAND DOCS correctly"
-  (def expected @[@["COMMAND" "DOCS"]])
-  (def actual (peg/match i/RESP "*2\r\n$7\r\nCOMMAND\r\n$4\r\nDOCS\r\n"))
+  (def expected @["COMMAND" "DOCS"])
+  (def actual (i/resp-parse "*2\r\n$7\r\nCOMMAND\r\n$4\r\nDOCS\r\n"))
   (assert-equal expected actual))
 
 (with-test "should dump SET LIFE 42 correctly"

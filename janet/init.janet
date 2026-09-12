@@ -13,6 +13,10 @@
    :array       (group (* "*" (lenprefix (* (number :d+) :return) :value)))})
 
 
+(defn resp-parse [s]
+  (first (peg/match RESP s)))
+
+
 (defn resp-dump [x]
   (cond
     (indexed? x) (string "*" (length x) "\r\n" ;(map resp-dump x))
@@ -39,7 +43,7 @@
     (def id (gensym))
     (defn lp [in]
       (when in
-        (def parsed (peg/match RESP in))
+        (def parsed (resp-parse in))
         (printf "%s< %n" id parsed)
         (def output (execute t parsed))
         (printf "%s> %n" id output)
