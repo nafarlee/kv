@@ -18,9 +18,9 @@
     (defn lp [in]
       (when in
         (when-let ([parsed] (peg/match RESP in))
-          (print (string/format "%s< %n" id parsed)))
+          (printf "%s< %n" id parsed))
         (:write connection "+OK\r\n")
-        (print (string/format "%s> \"+OK\"" id))
+        (printf "%s> \"+OK\"" id)
         (lp (:read connection BUFFER_SIZE))))
     (lp (:read connection BUFFER_SIZE))))
 
