@@ -53,7 +53,8 @@
 
 (defn serve []
   (print "Listening on port " PORT "...")
-  (net/server "127.0.0.1" PORT (partial handler @{})))
+  (def t @{})
+  (net/server "127.0.0.1" PORT |(handler t $))) 
 
 (defn main [& args]
   (serve))
