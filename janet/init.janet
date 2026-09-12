@@ -1,7 +1,7 @@
 #!/usr/bin/env janet
 
 (def BUFFER_SIZE 4096)
-(def PORT 4096)
+(def PORT 6379)
 
 (def RESP
  '{:main        :value
