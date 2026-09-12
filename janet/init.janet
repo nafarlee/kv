@@ -34,7 +34,7 @@
     :OK))
 
 
-(defn handler [connection]
+(defn handler [t connection]
   (defer (:close connection)
     (def id (gensym))
     (defn lp [in]
@@ -48,7 +48,7 @@
 
 (defn serve []
   (print "Listening on port " PORT "...")
-  (net/server "127.0.0.1" PORT handler))
+  (net/server "127.0.0.1" PORT (partial handler @{})))
 
 (defn main [& args]
   (serve))
