@@ -42,6 +42,12 @@
   v)
 
 
+(defn as-number [x & args]
+  (if (number? x)
+    x
+    (scan-number x ;args)))
+
+
 (defn execute [ht command]
   (match command
     ["EXISTS" & ks]
