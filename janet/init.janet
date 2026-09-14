@@ -50,8 +50,16 @@
     ["GET" k]
     (get ht k)
 
-    ["DEL" k]
-    (execute ht ["SET" k nil])
+    ["DEL" & ks]
+    (reduce
+     (fn :del-reducer [c k]
+       (if (has-key? ht k)
+         (do
+           (put ht k nil)
+           (+ c 1))
+         c))
+     0
+     ks)
 
     ["COMMAND" "DOCS"]
     "OK"
