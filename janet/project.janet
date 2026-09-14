@@ -6,3 +6,6 @@
 (declare-executable
   :name "kv"
   :entry "init.janet")
+
+(task "run" ["build"]
+  (os/execute ["./build/kv"] :p))
