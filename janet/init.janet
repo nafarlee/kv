@@ -53,6 +53,11 @@
     ["EXISTS" & ks]
     (length (filter |(has-key? ht $) ks))
 
+    ["INCR" k]
+    (if-let [n (as-number (get ht k 0) 10)]
+      (put-new ht k (+ n 1))
+      (:new Error (string/format "Key does not contain a number '%V'" k)))
+
     ["SET" k v]
     (do
       (put ht k v)
