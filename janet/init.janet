@@ -46,6 +46,9 @@
     ["GET" k]
     (get ht k)
 
+    ["DEL" k]
+    (execute ht ["SET" k nil])
+
     ["COMMAND" "DOCS"]
     "OK"
     
