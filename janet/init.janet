@@ -37,6 +37,11 @@
     (bytes? x)   (string "$" (length x) "\r\n" x "\r\n")))
 
 
+(defn put-new [x k v]
+  (put x k v)
+  v)
+
+
 (defn execute [ht command]
   (match command
     ["EXISTS" & ks]
