@@ -38,6 +38,9 @@
 
 (defn execute [ht command]
   (match command
+    ["EXISTS" & ks]
+    (length (filter |(has-key? ht $) ks))
+
     ["SET" k v]
     (do
       (put ht k v)
