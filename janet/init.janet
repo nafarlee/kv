@@ -30,6 +30,7 @@
 
 (defn resp-dump [x]
   (cond
+    (error? x)   (string "-" (get x :message) "\r\n")
     (indexed? x) (string "*" (length x) "\r\n" ;(map resp-dump x))
     (int? x)     (string ":" x "\r\n")
     (bytes? x)   (string "$" (length x) "\r\n" x "\r\n")))
@@ -46,7 +47,10 @@
     (get ht k)
 
     ["COMMAND" "DOCS"]
-    "OK"))
+    "OK"
+    
+    [c]
+    (:new Error (string/format "Unknown command '%V'" c))))
 
 
 (defn handler [t connection]
