@@ -59,10 +59,16 @@
     (defn lp [in]
       (when in
         (def parsed (resp-parse in))
-        (printf "[%s]< %n" id parsed)
+        (printf "%n" {:_client id :_type :request :rin in :in parsed})
         (def output (execute t parsed))
-        (printf "[%s]> %n" id output)
-        (:write connection (resp-dump output))
+        (def dumped (resp-dump output))
+        (printf "%n" {:_client id
+                      :_type :response
+                      :rin in
+                      :in parsed
+                      :rout dumped
+                      :out output})
+        (:write connection dumped)
         (lp (:read connection BUFFER_SIZE))))
     (lp (:read connection BUFFER_SIZE))))
 
