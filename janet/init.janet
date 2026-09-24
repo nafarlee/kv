@@ -34,7 +34,8 @@
     (error? x)   (string "-" (get x :message) "\r\n")
     (indexed? x) (string "*" (length x) "\r\n" ;(map resp-dump x))
     (int? x)     (string ":" x "\r\n")
-    (bytes? x)   (string "$" (length x) "\r\n" x "\r\n")))
+    (buffer? x)  (string "$" (length x) "\r\n" x "\r\n")
+    (bytes? x)   (string "+" x "\r\n")))
 
 
 (defn put-new [x k v]
