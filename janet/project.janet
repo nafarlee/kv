@@ -1,7 +1,8 @@
 (declare-project
   :name "kv"
   :description ```Toy kv service ```
-  :version "0.0.0")
+  :version "0.0.0"
+  :dependencies ["spork"])
 
 (declare-executable
   :name "kv"
