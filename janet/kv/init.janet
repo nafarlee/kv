@@ -1,17 +1,9 @@
 #!/usr/bin/env janet
+(import ./error :prefix "")
+
 
 (def BUFFER_SIZE 4096)
 (def PORT 6379)
-
-
-(def Error
-  {:prototype @{}
-   :new (fn [self message]
-          (table/setproto @{:message message} (:prototype self)))})
-
-
-(defn error? [e]
-  (and (table? e) (= (getproto e) (:prototype Error))))
 
 
 (def RESP
