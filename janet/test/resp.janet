@@ -21,5 +21,5 @@
 
 (with-test "should dump SET LIFE 42 correctly"
   (assert-equal
-   "*3\r\n$3\r\nSET\r\n$4\r\nLIFE\r\n:42\r\n"
+   "*3\r\n+SET\r\n+LIFE\r\n:42\r\n"
    (i/resp-dump [:SET :LIFE 42])))
