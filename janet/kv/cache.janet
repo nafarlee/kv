@@ -7,30 +7,30 @@
   {:data @{}})
            
 
-(defn execute [ht command]
+(defn execute [{:data data} command]
   (match command
     ["EXISTS" & ks]
-    (length (filter |(has-key? ht $) ks))
+    (length (filter |(has-key? data $) ks))
 
     ["INCR" k]
-    (if-let [n (as-number (get ht k 0) 10)]
-      (put-new ht k (+ n 1))
+    (if-let [n (as-number (get data k 0) 10)]
+      (put-new data k (+ n 1))
       (:new Error (string/format "Key does not contain a number '%V'" k)))
 
     ["SET" k v]
     (do
-      (put ht k v)
+      (put data k v)
       "OK")
     
     ["GET" k]
-    (get ht k)
+    (get data k)
 
     ["DEL" & ks]
     (reduce
      (fn :del-reducer [c k]
-       (if (has-key? ht k)
+       (if (has-key? data k)
          (do
-           (put ht k nil)
+           (put data k nil)
            (+ c 1))
          c))
      0
