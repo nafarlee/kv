@@ -1,5 +1,5 @@
 (import spork/test)
-(import /kv/init :as i)
+(import /kv/resp :as i)
 
 (defmacro with-test [name & body]
   ~(do
