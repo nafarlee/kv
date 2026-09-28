@@ -18,10 +18,12 @@
         (lp (:read connection BUFFER_SIZE))))
     (lp (:read connection BUFFER_SIZE))))
 
+
 (defn serve []
   (print "Listening on port " PORT "...")
   (def t @{})
   (net/server "127.0.0.1" PORT |(handler t $))) 
+
 
 (defn main [& args]
   (serve))
