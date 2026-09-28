@@ -3,6 +3,10 @@
 (import ./resp :as r)
 
 
+(defn make-cache []
+  {:data @{}})
+           
+
 (defn execute [ht command]
   (match command
     ["EXISTS" & ks]
