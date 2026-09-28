@@ -1,21 +1,11 @@
 #!/usr/bin/env janet
 (import ./error :prefix "")
 (import ./resp :prefix "")
+(import ./util :prefix "")
 
 
 (def BUFFER_SIZE 4096)
 (def PORT 6379)
-
-
-(defn put-new [x k v]
-  (put x k v)
-  v)
-
-
-(defn as-number [x & args]
-  (if (number? x)
-    x
-    (scan-number x ;args)))
 
 
 (defn execute [ht command]
