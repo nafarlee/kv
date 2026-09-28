@@ -1,5 +1,4 @@
 #!/usr/bin/env janet
-(import ./resp :prefix "")
 (import ./cache :prefix "")
 
 
@@ -12,17 +11,10 @@
     (def id (gensym))
     (defn lp [in]
       (when in
-        (def parsed (resp-parse in))
-        (printf "%n" {:_client id :_type :request :rin in :in parsed})
-        (def output (execute t parsed))
-        (def dumped (resp-dump output))
-        (printf "%n" {:_client id
-                      :_type :response
-                      :rin in
-                      :in parsed
-                      :rout dumped
-                      :out output})
-        (:write connection dumped)
+        (printf "%n" {:_client id :_type :request :in in})
+        (def out (accept t in))
+        (printf "%n" {:_client id :_type :response :out out})
+        (:write connection out)
         (lp (:read connection BUFFER_SIZE))))
     (lp (:read connection BUFFER_SIZE))))
 

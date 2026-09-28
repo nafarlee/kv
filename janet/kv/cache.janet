@@ -1,5 +1,7 @@
 (import ./error :prefix "")
 (import ./util :prefix "")
+(import ./resp :as r)
+
 
 (defn execute [ht command]
   (match command
@@ -35,3 +37,10 @@
     
     [c]
     (:new Error (string/format "Unknown command '%V'" c))))
+
+
+(defn accept [t input]
+  (->> input
+       r/resp-parse
+       (execute t)
+       r/resp-dump))
