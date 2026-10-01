@@ -45,3 +45,11 @@
   (def actual (let [cache (c/make-cache)]
                 (c/dispatch cache ["EXPIRE" "life" -1])))
   (assert-equal expected actual))
+
+(with-test "should set TTL with a positive EXPIRE"
+  (def expected 10)
+  (def actual (let [cache (c/make-cache)]
+                (c/dispatch cache ["SET" "life" 42])
+                (c/dispatch cache ["EXPIRE" "life" 10])
+                (c/dispatch cache ["TTL" "life"])))
+  (assert-equal expected actual))
