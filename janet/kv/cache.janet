@@ -20,7 +20,7 @@
   v)
            
 
-(defn execute [cache command]
+(defn dispatch [cache command]
   (match command
     ["EXISTS" & ks]
     (length (filter |(cache-has? cache $) ks))
@@ -59,5 +59,5 @@
 (defn accept [t input]
   (->> input
        r/resp-parse
-       (execute t)
+       (dispatch t)
        r/resp-dump))
