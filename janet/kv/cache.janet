@@ -37,11 +37,22 @@
       1)))
 
 
+(defn cache-ttl-get [cache k]
+  (if-not (cache-has? cache k)
+    -2
+    (let [ttl (get-in cache [:ttls k])]
+      (if-not ttl
+        -1
+        (- ttl (os/clock :realtime :int))))))
+
+
 (defn dispatch [cache command]
   (match command
     ["EXPIRE" k sec]
     (cache-ttl-set! cache k sec)
 
+    ["TTL" k]
+    (cache-ttl-get cache k)
 
     ["EXISTS" & ks]
     (length (filter |(cache-has? cache $) ks))
