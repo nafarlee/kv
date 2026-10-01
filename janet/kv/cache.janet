@@ -4,7 +4,8 @@
 
 
 (defn make-cache []
-  {:data @{}})
+  {:data @{}
+   :ttls @{}})
 
 
 (defn cache-get [{:data data} k &opt de]
@@ -18,10 +19,30 @@
 (defn cache-set! [{:data data} k v]
   (put data k v)
   v)
-           
+
+
+(defn cache-ttl-set! [cache k sec]
+  (def now (os/clock))
+  (cond
+    (not (cache-has? cache k))
+    0
+
+    (neg? sec)
+    (do
+      (cache-set! cache k nil)
+      1)
+    
+    (do
+      (put (get cache :ttls) k (+ now sec))
+      1)))
+
 
 (defn dispatch [cache command]
   (match command
+    ["EXPIRE" k sec]
+    (cache-ttl-set! cache k sec)
+
+
     ["EXISTS" & ks]
     (length (filter |(cache-has? cache $) ks))
 
