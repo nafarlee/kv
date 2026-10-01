@@ -31,3 +31,17 @@
                 (c/dispatch cache ["SET" "life" 42])
                 (c/dispatch cache ["GET" "life"])))
   (assert-equal expected actual))
+
+(with-test "should delete a key with negative EXPIRE"
+  (def expected nil)
+  (def actual (let [cache (c/make-cache)]
+                (c/dispatch cache ["SET" "life" 42])
+                (c/dispatch cache ["EXPIRE" "life" -1])
+                (c/dispatch cache ["GET" "life"])))
+  (assert-equal expected actual))
+
+(with-test "should not set EXPIRE on empty key"
+  (def expected 0)
+  (def actual (let [cache (c/make-cache)]
+                (c/dispatch cache ["EXPIRE" "life" -1])))
+  (assert-equal expected actual))
