@@ -22,7 +22,7 @@
 
 
 (defn cache-ttl-set! [cache k sec]
-  (def now (os/clock))
+  (def now (os/clock :realtime :int))
   (cond
     (not (cache-has? cache k))
     0
