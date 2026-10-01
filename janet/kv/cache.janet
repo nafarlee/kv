@@ -20,30 +20,30 @@
   v)
            
 
-(defn execute [{:data data} command]
+(defn execute [cache command]
   (match command
     ["EXISTS" & ks]
-    (length (filter |(has-key? data $) ks))
+    (length (filter |(cache-has? cache $) ks))
 
     ["INCR" k]
-    (if-let [n (as-number (get data k 0) 10)]
-      (put-new data k (+ n 1))
+    (if-let [n (as-number (cache-get cache k 0) 10)]
+      (cache-set! cache k (+ n 1))
       (:new Error (string/format "Key does not contain a number '%V'" k)))
 
     ["SET" k v]
     (do
-      (put data k v)
+      (cache-set! cache k v)
       "OK")
     
     ["GET" k]
-    (get data k)
+    (cache-get cache k)
 
     ["DEL" & ks]
     (reduce
      (fn :del-reducer [c k]
-       (if (has-key? data k)
+       (if (cache-has? cache k)
          (do
-           (put data k nil)
+           (cache-set! cache k nil)
            (+ c 1))
          c))
      0
