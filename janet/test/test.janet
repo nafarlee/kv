@@ -1,5 +1,6 @@
 (import spork/test)
 (import /kv/resp :as i)
+(import /kv/cache :as c)
 
 (defmacro with-test [name & body]
   ~(do
@@ -23,3 +24,10 @@
   (assert-equal
    "*3\r\n+SET\r\n+LIFE\r\n:42\r\n"
    (i/resp-dump [:SET :LIFE 42])))
+
+(with-test "should SET and GET a key"
+  (def expected 42)
+  (def actual (let [cache (c/make-cache)]
+                (c/dispatch cache ["SET" "life" 42])
+                (c/dispatch cache ["GET" "life"])))
+  (assert-equal expected actual))
