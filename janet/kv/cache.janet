@@ -5,6 +5,19 @@
 
 (defn make-cache []
   {:data @{}})
+
+
+(defn cache-get [{:data data} k &opt de]
+  (get data k de))
+
+
+(defn cache-has? [cache k]
+  (not= nil (cache-get cache k)))
+
+
+(defn cache-set! [{:data data} k v]
+  (put data k v)
+  v)
            
 
 (defn execute [{:data data} command]
