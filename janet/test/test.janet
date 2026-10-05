@@ -3,7 +3,7 @@
 (import /kv/cache :as c)
 
 (defmacro with-test [name & body]
-  ~(deftest ,(symbol name) 
+  ~(deftest ,(->> name (string/replace-all " " "-") symbol) 
      ,;body))
 
 (with-test "should parse COMMAND DOCS correctly"
