@@ -49,7 +49,7 @@
 (defn cache-command-ttl [cache k]
   (if-not (cache-has? cache k)
     -2
-    (let [ttl (get-in cache [:ttls k])]
+    (let [ttl (cache-ttl-get cache k)]
       (if-not ttl
         -1
         (- ttl (os/clock :realtime :int))))))
