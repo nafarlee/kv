@@ -21,7 +21,7 @@
   v)
 
 
-(defn cache-ttl-set! [cache k sec]
+(defn cache-command-expire! [cache k sec]
   (def now (os/clock :realtime :int))
   (cond
     (not (cache-has? cache k))
@@ -49,7 +49,7 @@
 (defn dispatch [cache command]
   (match command
     ["EXPIRE" k sec]
-    (cache-ttl-set! cache k sec)
+    (cache-command-expire! cache k sec)
 
     ["TTL" k]
     (cache-ttl-get cache k)
