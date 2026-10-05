@@ -62,3 +62,12 @@
      (c/dispatch cache ["EXPIRE" "life" 10])
      (c/dispatch cache ["SET" "life" 100])
      (c/dispatch cache ["TTL" "life"]))))
+
+(with-test "should clear ttl on DEL"
+  (assert-equal
+   -2
+   (let [cache (c/make-cache)]
+     (c/dispatch cache ["SET" "life" 42])
+     (c/dispatch cache ["EXPIRE" "life" 10])
+     (c/dispatch cache ["DEL" "life"])
+     (c/dispatch cache ["TTL" "life"]))))
