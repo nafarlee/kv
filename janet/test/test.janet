@@ -72,6 +72,14 @@
          (c/dispatch cache ["INCR" "life"])
          (c/dispatch cache ["TTL" "life"])))))
 
+(with-test "should gracefully handle a string-y EXPIRE"
+  (is (==
+       1
+       (let [cache (c/make-cache)]
+         (c/dispatch cache ["SET" "life" 42])
+         (c/dispatch cache ["EXPIRE" "life" "1"])
+         (c/dispatch cache ["TTL" "life"])))))
+
 (with-test "should delete after expiration is reached"
   (is (==
        nil
