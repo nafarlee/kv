@@ -37,7 +37,7 @@
       1)))
 
 
-(defn cache-ttl-get [cache k]
+(defn cache-command-ttl [cache k]
   (if-not (cache-has? cache k)
     -2
     (let [ttl (get-in cache [:ttls k])]
@@ -52,7 +52,7 @@
     (cache-command-expire! cache k sec)
 
     ["TTL" k]
-    (cache-ttl-get cache k)
+    (cache-command-ttl cache k)
 
     ["EXISTS" & ks]
     (length (filter |(cache-has? cache $) ks))
