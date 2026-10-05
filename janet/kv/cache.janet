@@ -30,6 +30,16 @@
   (get ttls k))
 
 
+(defn cache-schedule-expiration! [cache k sec]
+  (ev/spawn
+    (ev/sleep sec)
+    (def now (os/clock :realtime :int))
+    (def expiration (cache-ttl-get cache k))
+    (when (and expiration (<= expiration now))
+      (cache-set! cache k nil)
+      (cache-ttl-set! cache k nil))))
+
+
 (defn cache-command-expire! [cache k sec]
   (def now (os/clock :realtime :int))
   (cond
@@ -43,6 +53,7 @@
     
     (do
       (cache-ttl-set! cache k (+ now sec))
+      (cache-schedule-expiration! cache k sec)
       1)))
 
 
