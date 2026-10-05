@@ -16,7 +16,7 @@
 
 (defn resp-dump [x]
   (cond
-    (nil? x)     "_\r\n"
+    (nil? x)     "$-1\r\n"
     (error? x)   (string "-" (get x :message) "\r\n")
     (indexed? x) (string "*" (length x) "\r\n" ;(map resp-dump x))
     (int? x)     (string ":" x "\r\n")
