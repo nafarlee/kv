@@ -36,7 +36,7 @@
     (not (cache-has? cache k))
     0
 
-    (neg? sec)
+    (not (pos? sec))
     (do
       (cache-set! cache k nil)
       1)
