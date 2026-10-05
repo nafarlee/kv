@@ -87,6 +87,13 @@
          (c/dispatch cache ["EXPIRE" "life" "1"])
          (c/dispatch cache ["TTL" "life"])))))
 
+(with-test "should remove ttl upon PERSIST"
+  (let [cache (c/make-cache)]
+    (c/dispatch cache ["SET" "life" 42])
+    (c/dispatch cache ["EXPIRE" "life" 1])
+    (is (== 1 (c/dispatch cache ["PERSIST" "life"])))
+    (is (== -1 (c/dispatch cache ["TTL" "life"])))))
+
 (with-test "should delete after expiration is reached"
   (is (==
        nil
