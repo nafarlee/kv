@@ -21,6 +21,11 @@
   v)
 
 
+(defn cache-ttl-set! [{:ttls ttls} k v]
+  (put ttls k v)
+  nil)
+
+
 (defn cache-command-expire! [cache k sec]
   (def now (os/clock :realtime :int))
   (cond
