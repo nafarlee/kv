@@ -18,7 +18,7 @@
 
 (defn cache-set! [{:data data} k v]
   (put data k v)
-  v)
+  nil)
 
 
 (defn cache-ttl-set! [{:ttls ttls} k v]
@@ -70,6 +70,7 @@
     ["SET" k v]
     (do
       (cache-set! cache k v)
+      (cache-ttl-set! cache k nil)
       "OK")
     
     ["GET" k]
@@ -81,6 +82,7 @@
        (if (cache-has? cache k)
          (do
            (cache-set! cache k nil)
+           (cache-ttl-set! cache k nil)
            (+ c 1))
          c))
      0
