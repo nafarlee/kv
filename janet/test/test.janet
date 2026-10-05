@@ -53,3 +53,12 @@
                 (c/dispatch cache ["EXPIRE" "life" 10])
                 (c/dispatch cache ["TTL" "life"])))
   (assert-equal expected actual))
+
+(with-test "should clear ttl on SET"
+  (assert-equal
+   -1
+   (let [cache (c/make-cache)]
+     (c/dispatch cache ["SET" "life" 42])
+     (c/dispatch cache ["EXPIRE" "life" 10])
+     (c/dispatch cache ["SET" "life" 100])
+     (c/dispatch cache ["TTL" "life"]))))
