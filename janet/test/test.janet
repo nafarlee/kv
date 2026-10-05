@@ -38,10 +38,10 @@
   (is (== expected actual)))
 
 (with-test "should set TTL with a positive EXPIRE"
-  (def expected 10)
+  (def expected 1)
   (def actual (let [cache (c/make-cache)]
                 (c/dispatch cache ["SET" "life" 42])
-                (c/dispatch cache ["EXPIRE" "life" 10])
+                (c/dispatch cache ["EXPIRE" "life" 1])
                 (c/dispatch cache ["TTL" "life"])))
   (is (== expected actual)))
 
@@ -50,7 +50,7 @@
        -1
        (let [cache (c/make-cache)]
          (c/dispatch cache ["SET" "life" 42])
-         (c/dispatch cache ["EXPIRE" "life" 10])
+         (c/dispatch cache ["EXPIRE" "life" 1])
          (c/dispatch cache ["SET" "life" 100])
          (c/dispatch cache ["TTL" "life"])))))
 
@@ -59,16 +59,16 @@
        -2
        (let [cache (c/make-cache)]
          (c/dispatch cache ["SET" "life" 42])
-         (c/dispatch cache ["EXPIRE" "life" 10])
+         (c/dispatch cache ["EXPIRE" "life" 1])
          (c/dispatch cache ["DEL" "life"])
          (c/dispatch cache ["TTL" "life"])))))
 
 (with-test "should not clear ttl on INCR"
   (is (==
-       10
+       1
        (let [cache (c/make-cache)]
          (c/dispatch cache ["SET" "life" 42])
-         (c/dispatch cache ["EXPIRE" "life" 10])
+         (c/dispatch cache ["EXPIRE" "life" 1])
          (c/dispatch cache ["INCR" "life"])
          (c/dispatch cache ["TTL" "life"])))))
 
