@@ -23,6 +23,13 @@
                 (c/dispatch cache ["GET" "life"])))
   (is (== expected actual)))
 
+(with-test "should have case-insensitive commands"
+  (def expected 42)
+  (def actual (let [cache (c/make-cache)]
+                (c/dispatch cache ["sEt" "life" 42])
+                (c/dispatch cache ["GeT" "life"])))
+  (is (== expected actual)))
+
 (with-test "should delete a key with negative EXPIRE"
   (def expected nil)
   (def actual (let [cache (c/make-cache)]
