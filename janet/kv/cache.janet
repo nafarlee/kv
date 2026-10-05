@@ -26,6 +26,10 @@
   nil)
 
 
+(defn cache-ttl-get [{:ttls ttls} k]
+  (get ttls k))
+
+
 (defn cache-command-expire! [cache k sec]
   (def now (os/clock :realtime :int))
   (cond
