@@ -1,5 +1,5 @@
 (use testament)
-(import /kv/resp :as i)
+(import /kv/resp :as r)
 (import /kv/cache :as c)
 
 (defmacro with-test [name & body]
@@ -8,13 +8,13 @@
 
 (with-test "should parse COMMAND DOCS correctly"
   (def expected @["COMMAND" "DOCS"])
-  (def actual (i/resp-parse "*2\r\n$7\r\nCOMMAND\r\n$4\r\nDOCS\r\n"))
+  (def actual (r/resp-parse "*2\r\n$7\r\nCOMMAND\r\n$4\r\nDOCS\r\n"))
   (is (== expected actual)))
 
 (with-test "should dump SET LIFE 42 correctly"
   (is (==
        "*3\r\n+SET\r\n+LIFE\r\n:42\r\n"
-       (i/resp-dump [:SET :LIFE 42]))))
+       (r/resp-dump [:SET :LIFE 42]))))
 
 (with-test "should SET and GET a key"
   (def expected 42)
