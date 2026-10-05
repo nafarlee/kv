@@ -38,7 +38,7 @@
       1)
     
     (do
-      (put (get cache :ttls) k (+ now sec))
+      (cache-ttl-set! cache k (+ now sec))
       1)))
 
 
