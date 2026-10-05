@@ -71,3 +71,12 @@
      (c/dispatch cache ["EXPIRE" "life" 10])
      (c/dispatch cache ["DEL" "life"])
      (c/dispatch cache ["TTL" "life"]))))
+
+(with-test "should not clear ttl on INCR"
+  (assert-equal
+   10
+   (let [cache (c/make-cache)]
+     (c/dispatch cache ["SET" "life" 42])
+     (c/dispatch cache ["EXPIRE" "life" 10])
+     (c/dispatch cache ["INCR" "life"])
+     (c/dispatch cache ["TTL" "life"]))))
