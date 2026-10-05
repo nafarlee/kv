@@ -80,3 +80,12 @@
      (c/dispatch cache ["EXPIRE" "life" 10])
      (c/dispatch cache ["INCR" "life"])
      (c/dispatch cache ["TTL" "life"]))))
+
+(with-test "should delete after expiration is reached"
+  (assert-equal
+   nil
+   (let [cache (c/make-cache)]
+     (c/dispatch cache ["SET" "life" 42])
+     (c/dispatch cache ["EXPIRE" "life" 1])
+     (ev/sleep 2)
+     (c/dispatch cache ["GET" "life"]))))
