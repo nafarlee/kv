@@ -70,8 +70,8 @@
         (- ttl (os/clock :realtime :int))))))
 
 
-(defn dispatch [cache command]
-  (match command
+(defn dispatch [cache [command & args]]
+  (match [(string/ascii-upper command) ;args]
     ["EXPIRE" k sec]
     (cache-command-expire! cache k sec)
 
