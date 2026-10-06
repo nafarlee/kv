@@ -109,4 +109,9 @@
          (ev/sleep 2)
          (c/dispatch cache ["GET" "life"])))))
 
+(with-test "should always return a string from GET"
+  (let [cache (c/make-cache)]
+    (c/dispatch cache ["SET" "life" 42])
+    (is (== "42" (c/dispatch cache ["GET" "life"])))))
+
 (run-tests!)
