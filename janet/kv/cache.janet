@@ -30,14 +30,18 @@
   (get ttls k))
 
 
+(defn cache-delete! [cache k]
+  (cache-set! cache k nil)
+  (cache-ttl-set! cache k nil))
+
+
 (defn cache-schedule-expiration! [cache k sec]
   (ev/spawn
     (ev/sleep sec)
     (def now (os/clock :realtime :int))
     (def expiration (cache-ttl-get cache k))
     (when (and expiration (<= expiration now))
-      (cache-set! cache k nil)
-      (cache-ttl-set! cache k nil))))
+      (cache-delete! cache k))))
 
 
 (defn cache-command-expire! [cache k sec]
@@ -52,7 +56,7 @@
 
     (not (pos? nsec))
     (do
-      (cache-set! cache k nil)
+      (cache-delete! cache k)
       1)
     
     (do
@@ -118,8 +122,7 @@
      (fn :del-reducer [c k]
        (if (cache-has? cache k)
          (do
-           (cache-set! cache k nil)
-           (cache-ttl-set! cache k nil)
+           (cache-delete! cache k)
            (+ c 1))
          c))
      0
