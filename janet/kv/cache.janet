@@ -70,8 +70,24 @@
         (- ttl (os/clock :realtime :int))))))
 
 
+(defn cache-command-persist! [cache k]
+  (cond
+    (not (cache-has? cache k))
+    0
+
+    (nil? (cache-ttl-get cache k))
+    0
+
+    (do
+      (cache-ttl-set! cache k nil)
+      1)))
+
+
 (defn dispatch [cache [command & args]]
   (match [(string/ascii-upper command) ;args]
+    ["PERSIST" k]
+    (cache-command-persist! cache k)
+
     ["EXPIRE" k sec]
     (cache-command-expire! cache k sec)
 
