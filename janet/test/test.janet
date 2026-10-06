@@ -94,6 +94,12 @@
     (is (== 1 (c/dispatch cache ["PERSIST" "life"])))
     (is (== -1 (c/dispatch cache ["TTL" "life"])))))
 
+(with-test "should return updated value on INCR"
+  (let [cache (c/make-cache)]
+    (c/dispatch cache ["SET" "life" 42])
+    (is (== 43 (c/dispatch cache ["INCR" "life"])))
+    (is (== 43 (c/dispatch cache ["GET" "life"])))))
+
 (with-test "should delete after expiration is reached"
   (is (==
        nil
