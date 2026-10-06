@@ -95,7 +95,7 @@
       "OK")
     
     ["GET" k]
-    (cache-get cache k)
+    (-?> (cache-get cache k) string)
 
     ["DEL" & ks]
     (reduce

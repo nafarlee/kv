@@ -17,14 +17,14 @@
        (r/resp-dump [:SET :LIFE 42]))))
 
 (with-test "should SET and GET a key"
-  (def expected 42)
+  (def expected "42")
   (def actual (let [cache (c/make-cache)]
                 (c/dispatch cache ["SET" "life" 42])
                 (c/dispatch cache ["GET" "life"])))
   (is (== expected actual)))
 
 (with-test "should have case-insensitive commands"
-  (def expected 42)
+  (def expected "42")
   (def actual (let [cache (c/make-cache)]
                 (c/dispatch cache ["sEt" "life" 42])
                 (c/dispatch cache ["GeT" "life"])))
@@ -98,7 +98,7 @@
   (let [cache (c/make-cache)]
     (c/dispatch cache ["SET" "life" 42])
     (is (== 43 (c/dispatch cache ["INCR" "life"])))
-    (is (== 43 (c/dispatch cache ["GET" "life"])))))
+    (is (== "43" (c/dispatch cache ["GET" "life"])))))
 
 (with-test "should delete after expiration is reached"
   (is (==
