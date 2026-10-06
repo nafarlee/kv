@@ -83,7 +83,9 @@
 
     ["INCR" k]
     (if-let [n (as-number (cache-get cache k 0) 10)]
-      (cache-set! cache k (+ n 1))
+      (do
+        (cache-set! cache k (inc n))
+        (inc n))
       (:new Error (string/format "Key does not contain a number '%V'" k)))
 
     ["SET" k v]
