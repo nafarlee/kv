@@ -114,4 +114,13 @@
     (c/dispatch cache ["SET" "life" 42])
     (is (== "42" (c/dispatch cache ["GET" "life"])))))
 
+(with-test "should completely remove key on negative EXPIRE"
+  (let [cache (c/make-cache)]
+    (c/dispatch cache ["SET" "life" 42])
+    (c/dispatch cache ["EXPIRE" "life" 1])
+    (c/dispatch cache ["EXPIRE" "life" -1])
+    (c/dispatch cache ["INCR" "life"])
+    (is (== "1" (c/dispatch cache ["GET" "life"])))
+    (is (== -1 (c/dispatch cache ["TTL" "life"])))))
+
 (run-tests!)
