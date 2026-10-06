@@ -42,18 +42,22 @@
 
 (defn cache-command-expire! [cache k sec]
   (def now (os/clock :realtime :int))
+  (def nsec (as-number sec))
   (cond
+    (not nsec)
+    0
+
     (not (cache-has? cache k))
     0
 
-    (not (pos? sec))
+    (not (pos? nsec))
     (do
       (cache-set! cache k nil)
       1)
     
     (do
-      (cache-ttl-set! cache k (+ now sec))
-      (cache-schedule-expiration! cache k sec)
+      (cache-ttl-set! cache k (+ now nsec))
+      (cache-schedule-expiration! cache k nsec)
       1)))
 
 
