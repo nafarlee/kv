@@ -106,7 +106,7 @@
       (do
         (cache-set! cache k (inc n))
         (inc n))
-      (:new Error (string/format "Key does not contain a number '%V'" k)))
+      (:new Error (string/format "Key does not contain an integer '%V'" k)))
 
     ["SET" k v]
     (do
