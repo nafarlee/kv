@@ -102,7 +102,8 @@
     (length (filter |(cache-has? cache $) ks))
 
     ["INCR" k]
-    (if-let [n (as-number (cache-get cache k 0) 10)]
+    (if-let [n (as-number (cache-get cache k 0) 10)
+             _ (int? n)]
       (do
         (cache-set! cache k (inc n))
         (inc n))
