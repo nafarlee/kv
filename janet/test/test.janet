@@ -123,4 +123,10 @@
     (is (== "1" (c/dispatch cache ["GET" "life"])))
     (is (== -1 (c/dispatch cache ["TTL" "life"])))))
 
+(with-test "should not allow floats to be INCR"
+  (let [cache (c/make-cache)]
+    (c/dispatch cache ["SET" "life" 1.5])
+    (is (== @{:message "Key does not contain an integer 'life'"}
+            (c/dispatch cache ["INCR" "life"])))))
+
 (run-tests!)
